@@ -1,10 +1,24 @@
 package com.example.iguomm.mynote;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.iguomm.mynote.fragment.FourFragment;
+import com.example.iguomm.mynote.fragment.HomeFragment;
+import com.example.iguomm.mynote.fragment.MineFragment;
+import com.example.iguomm.mynote.fragment.TwoFragment;
+import com.example.iguomm.mynote.fragment.WriteFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,7 +27,47 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView textView = new TextView(this);
+        //获取控件
+        FragmentTabHost tabHost  = (FragmentTabHost) findViewById(android.R.id.tabhost);
+        //加载Fragment的承载布局
+        tabHost.setup(this,getSupportFragmentManager(),R.id.main_content);
+        //设置去掉分割线，第一个为主页
+        tabHost.getTabWidget().setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
+        tabHost.setCurrentTab(0);
+        //定义一个Fragment，一个存放图片，存放文字的集合
+        List<Class> fragments = new ArrayList<>();
+        fragments.add(HomeFragment.class);
+        fragments.add(TwoFragment.class);
+        fragments.add(WriteFragment.class);
+        fragments.add(FourFragment.class);
+        fragments.add(MineFragment.class);
+        //
+        int[] images = new int[]{
+                R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,
+                R.mipmap.ic_launcher,R.mipmap.ic_launcher
+        };
+        //
+        String[] titles = new String[]{
+                "home","two","","four","mine"
+        };
+
+
+
+        //加载布局
+        for(int i = 0; i < 5; i++){
+            View view = LayoutInflater.from(this).inflate(R.layout.tabhost,null,false);
+            ImageView iamge = (ImageView) view.findViewById(R.id.tab_image);
+            TextView title = (TextView) view.findViewById(R.id.tab_title);
+            if( titles[i].isEmpty()){
+                title.setVisibility(View.GONE);
+            }
+            iamge.setBackgroundResource(images[i]);
+            tabHost.addTab(tabHost.newTabSpec(titles[i]).setIndicator(view),fragments.get(i),null);
+        }
+
+
+
+
 
 
     }
