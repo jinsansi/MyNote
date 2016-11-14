@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initTabHost();
+    }
+
+    public void initTabHost(){
         //获取控件
         FragmentTabHost tabHost  = (FragmentTabHost) findViewById(android.R.id.tabhost);
         //加载Fragment的承载布局
@@ -34,38 +38,27 @@ public class MainActivity extends AppCompatActivity {
         //设置去掉分割线，第一个为主页
         tabHost.getTabWidget().setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
         tabHost.setCurrentTab(0);
-        //定义一个Fragment，一个存放图片，存放文字的集合
-        List<Class> fragments = new ArrayList<>();
-        fragments.add(HomeFragment.class);
-        fragments.add(TwoFragment.class);
-        fragments.add(WriteFragment.class);
-        fragments.add(FourFragment.class);
-        fragments.add(MineFragment.class);
-        //
-        int[] images = new int[]{
-                R.drawable.ic, R.drawable.ic, R.mipmap.zw_icon_tjzhuanti_click, R.drawable.ic, R.drawable.ic,
-        };
-        //
-        String[] titles = new String[]{
-                "发现","关注","","消息","我的"
-        };
+
+        List<TabHostBean> tab = new ArrayList<>();
+        tab.add(new TabHostBean(HomeFragment.class,"发现",R.drawable.ic));
+        tab.add(new TabHostBean(TwoFragment.class,"关注",R.drawable.ic));
+        tab.add(new TabHostBean(WriteFragment.class,R.mipmap.zw_icon_tjzhuanti_click));
+        tab.add(new TabHostBean(FourFragment.class,"消息",R.drawable.ic));
+        tab.add(new TabHostBean(MineFragment.class,"我的",R.drawable.ic));
+
         //加载布局
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < tab.size(); i++){
             View view = LayoutInflater.from(this).inflate(R.layout.tabhost,null,false);
             ImageView iamge = (ImageView) view.findViewById(R.id.tab_image);
             TextView title = (TextView) view.findViewById(R.id.tab_title);
-            if( titles[i].isEmpty()){
+            String titles = tab.get(i).getTitle();
+            if(titles.isEmpty()){
                 title.setVisibility(View.GONE);
             }
-            title.setText(titles[i]);
-            iamge.setBackgroundResource(images[i]);
-            tabHost.addTab(tabHost.newTabSpec(titles[i]).setIndicator(view),fragments.get(i),null);
+            title.setText(titles);
+            iamge.setBackgroundResource(tab.get(i).getIcon());
+            tabHost.addTab(tabHost.newTabSpec(titles).setIndicator(view),tab.get(i).getFragment(),null);
         }
-
-
-
-
-
 
     }
 }
