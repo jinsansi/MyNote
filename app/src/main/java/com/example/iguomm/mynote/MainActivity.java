@@ -43,16 +43,12 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(MineFragment.class);
         //
         int[] images = new int[]{
-                R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,
-                R.mipmap.ic_launcher,R.mipmap.ic_launcher
+                R.drawable.ic, R.drawable.ic, R.mipmap.zw_icon_tjzhuanti_click, R.drawable.ic, R.drawable.ic,
         };
         //
         String[] titles = new String[]{
-                "home","two","","four","mine"
+                "发现","关注","","消息","我的"
         };
-
-
-
         //加载布局
         for(int i = 0; i < 5; i++){
             View view = LayoutInflater.from(this).inflate(R.layout.tabhost,null,false);
@@ -61,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             if( titles[i].isEmpty()){
                 title.setVisibility(View.GONE);
             }
+            title.setText(titles[i]);
             iamge.setBackgroundResource(images[i]);
             tabHost.addTab(tabHost.newTabSpec(titles[i]).setIndicator(view),fragments.get(i),null);
         }
